@@ -1,0 +1,1 @@
+export interface Concept{id:string;text_tr:string;text_en:string;text_de:string;text_ru:string;icon_1:string;icon_2:string;icon_3:string;icon_4:string;icon_5:string;islem_zamani:string}

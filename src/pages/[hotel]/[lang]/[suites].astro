@@ -1,0 +1,186 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+import {type Suites} from "../../../db/interfaces/suites";
+import type {Suites_info} from "../../../db/interfaces/suites_info";
+import {type Suit_photos} from "../../../db/interfaces/suit_photos";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", suites: 'suitler'}},
+        {params: {lang: 'tr', hotel: "tsc", suites: 'suitler'}},
+        {params: {lang: 'de', hotel: "ts", suites: 'suiten'}},
+        {params: {lang: 'de', hotel: "tsc", suites: 'suiten'}},
+        {params: {lang: 'en', hotel: "tsc", suites: 'suites'}},
+        {params: {lang: 'en', hotel: "ts", suites: 'suites'}},
+        {params: {lang: 'ru', hotel: "ts", suites: 'апартаменты'}},
+        {params: {lang: 'ru', hotel: "tsc", suites: 'апартаменты'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+
+}
+const suits = await getTable<Suites[]>(hotel, TableName.suites);
+function getSuiteTitle(suites: Suites) {
+    switch (lang) {
+        case 'tr':
+            return suites.name_tr;
+        case 'de':
+            return suites.name_de;
+        case 'ru':
+            return suites.name_ru;
+        default:
+            return suites.name_en;
+    }
+}
+function getSuiteText(suites: Suites) {
+    switch (lang) {
+        case 'tr':
+            return suites.text_tr;
+        case 'de':
+            return suites.text_de;
+        case 'ru':
+            return suites.text_ru;
+        default:
+            return suites.text_en;
+    }
+}
+const suitesInfo = await getTable<Suites_info>(hotel, TableName.suites_info);
+function getSuiteInfo() {
+    switch (lang) {
+        case 'tr':
+            return suitesInfo.text_tr;
+        case 'de':
+            return suitesInfo.text_de;
+        case 'ru':
+            return suitesInfo.text_ru;
+        default:
+            return suitesInfo.text_en;
+
+    }
+}
+const suitPhotos = await getTable<Suit_photos[]>(hotel, TableName.suit_photos);
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('suites')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li><a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>{getTranslate('home')}</a></li>
+                            <li class="active">{getTranslate('suites')}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="rooms">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div role="tabpanel">
+                            <ul class="nav nav-tabs" role="tablist" id="myTab">
+                                {
+                                    suits.map((suite, index) => {
+                                        return (
+                                                <li role="presentation" class={index == 0 ? 'active' : ''}>
+                                                    <a href={`#${suite.name_en}`} aria-controls={`${suite.name_en}`}
+                                                       role="tab"
+                                                       data-toggle="tab">{getSuiteTitle(suite)}</a>
+                                                </li>
+
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="roomIntroText" set:html={getSuiteInfo()}>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tab-content">
+                        {
+                            suits.map((suite, index) => {
+                                <div role="tabpanel"
+                                     class={index == 0 ? 'active tab-pane fade in' : 'tab-pane fade in'}>
+                                    id={suite.name_en}>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id={`owl-demo${index}`} class="owl-carousel">
+                                                {
+
+                                                    suitPhotos.map((photo) => (
+                                                                    <div class="item">
+                                                                        <img src={`/assets/img/${photo.photo}`}
+                                                                             alt={getSuiteTitle(suite)}>
+                                                                    </div>
+                                                        )
+                                                    )
+
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="roomDetails" set:html={getSuiteText(suite)}>
+                                            </div>
+                                            <div class="banner">
+                                                <p>
+                                                    <a
+                                                            href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate('url_contact')}`}>
+                                                        {getTranslate('suit_contact_text')}
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            })
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</MainLayout>

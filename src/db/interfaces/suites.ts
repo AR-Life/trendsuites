@@ -1,0 +1,1 @@
+export interface Suites{id:string;cover_photo:string;name_tr:string;name_en:string;name_de:string;name_ru:string;text_tr:string;text_en:string;text_de:string;text_ru:string;row_no:string;active:string;islem_zamani:string}

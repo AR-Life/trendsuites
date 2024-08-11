@@ -1,0 +1,22 @@
+
+services:
+  db:
+    image: mysql:oraclelinux9
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: turkey
+    networks:
+      - mysql
+  phpmyadmin:
+      image: phpmyadmin:latest
+      restart: always
+      ports:
+        - 8080:80
+      environment:
+        - PMA_ARBITRARY=1
+        - PMA_USER=root
+        - PMA_PASSWORD=turkey
+      networks:
+        - mysql
+networks:
+  mysql:

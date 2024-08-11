@@ -1,0 +1,67 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+import type {Contact} from "../../../db/interfaces/contact";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", region: 'bolgemiz'}},
+        {params: {lang: 'tr', hotel: "tsc", region: 'bolgemiz'}},
+        {params: {lang: 'de', hotel: "ts", region: 'unsere-region'}},
+        {params: {lang: 'de', hotel: "tsc", region: 'unsere-region'}},
+        {params: {lang: 'en', hotel: "tsc", region: 'our-region'}},
+        {params: {lang: 'en', hotel: "ts", region: 'our-region'}},
+        {params: {lang: 'ru', hotel: "ts", region: 'наш-регион'}},
+        {params: {lang: 'ru', hotel: "tsc", region: 'наш-регион'}},
+    ];
+}
+const {lang, hotel} = Astro.params;
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+}
+const contact = await getTable<Contact>(hotel,TableName.contact)
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('location')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li><a href={`${import.meta.env.SITE}/${hotel}/${lang}`} }>{getTranslate('home')}</a></li>
+                            <li class="active">{getTranslate('location')}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bolgemiz">
+            <iframe id="map2" src={contact.loc_map} width="100%" height="100%"></iframe>
+        </div>
+    </section>
+</MainLayout>

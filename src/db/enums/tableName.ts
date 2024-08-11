@@ -1,0 +1,1 @@
+export enum TableName { about = "about", concept = "concept", contact = "contact", fas_icons = "fas_icons", gallery = "gallery", location = "location", mp_info = "mp_info", seo = "seo", slider = "slider", specs = "specs", suites = "suites", suites_info = "suites_info", suit_photos = "suit_photos", translate = "translate" }

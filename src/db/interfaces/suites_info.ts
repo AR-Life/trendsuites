@@ -1,0 +1,1 @@
+export interface Suites_info{id:string;text_tr:string;text_en:string;text_de:string;text_ru:string;islem_zamani:string}

@@ -1,0 +1,1 @@
+export interface Translate{id:string;tag:string;tr:string;en:string;de:string;ru:string;islem_zamani:string}

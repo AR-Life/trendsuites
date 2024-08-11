@@ -1,0 +1,1 @@
+export interface Fas_icons{id:string;icon:string;islem_zamani:string}

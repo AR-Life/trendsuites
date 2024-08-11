@@ -1,0 +1,140 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+import  type {About} from "../../../db/interfaces/about";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", corporate: 'kurumsal'}},
+        {params: {lang: 'tr', hotel: "tsc", corporate: 'kurumsal'}},
+        {params: {lang: 'de', hotel: "ts", corporate: 'unternehmen'}},
+        {params: {lang: 'de', hotel: "tsc", corporate: 'unternehmen'}},
+        {params: {lang: 'en', hotel: "tsc", corporate: 'corporate'}},
+        {params: {lang: 'en', hotel: "ts", corporate: 'corporate'}},
+        {params: {lang: 'ru', hotel: "ts", corporate: 'корпоративный'}},
+        {params: {lang: 'ru', hotel: "tsc", corporate: 'корпоративный'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+
+}
+const about = await getTable<About>(hotel, TableName.about);
+
+function getAboutText() {
+    switch (lang) {
+        case 'tr':
+            return about.text_tr;
+        case 'ru':
+            return about.text_ru;
+        case 'de':
+            return about.text_de;
+        default:
+            return about.text_en;
+    }
+}
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('corporate')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li>
+                                <a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>
+                                    {getTranslate('home')}
+                                </a>
+                            </li>
+                            <li class="active">
+                                {getTranslate('general_info')}
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a href="#">{getTranslate('trend_suites')}</a>
+                        </li>
+                        <li>
+                            <a href="#" class="active2">
+                                {getTranslate('general_info')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate('url_corp_location')}`}>
+                                {getTranslate('location')}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <div class="row">
+                        <div class="col-12">
+                            <h1 class="text-center">{getTranslate('trend_suites')}</h1>
+                            <p set:html={getAboutText()}></p>
+                        </div>
+
+                        <div class="col-sm-4 corporate-icon">
+
+                            <div class="toggle">
+                                <i class="k-icon"></i>
+                            </div>
+                            <span><strong set:html={getTranslate('sea_distance')}></strong></span>
+
+                        </div>
+                        <div class="col-sm-4 corporate-icon">
+
+                            <div class="toggle">
+                                <i class="k-icon"></i>
+                            </div>
+                            <span><strong set:html={getTranslate('like_home')}></strong></span>
+
+                        </div>
+
+                        <div class="col-sm-4 corporate-icon">
+
+                            <div class="toggle">
+                                <i class="k-icon"></i>
+                            </div>
+                            <span><strong set:html={getTranslate('social_life')}></strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</MainLayout>

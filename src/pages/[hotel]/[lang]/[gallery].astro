@@ -1,0 +1,95 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+import type {Gallery} from "../../../db/interfaces/gallery";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", gallery: 'galeri'}},
+        {params: {lang: 'tr', hotel: "tsc", gallery: 'galeri'}},
+        {params: {lang: 'de', hotel: "ts", gallery: 'fotogallerie'}},
+        {params: {lang: 'de', hotel: "tsc", gallery: 'fotogallerie'}},
+        {params: {lang: 'en', hotel: "tsc", gallery: 'gallery'}},
+        {params: {lang: 'en', hotel: "ts", gallery: 'gallery'}},
+        {params: {lang: 'ru', hotel: "ts", gallery: 'фотогалерея'}},
+        {params: {lang: 'ru', hotel: "tsc", gallery: 'фотогалерея'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+}
+const photos = await getTable<Gallery[]>(hotel, TableName.gallery);
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('photo_gallery')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li><a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>{getTranslate('home')}</a></li>
+                            <li class="active">{getTranslate('photo_gallery')}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="cycle-slideshow slideshow" data-cycle-fx="scrollHorz" data-cycle-timeout="3000"
+                         data-cycle-pager=".slide-pager"
+                         data-cycle-pager-template="<li><a href='{{src}}'><figure class='effect-apollo img-thumbnail'><img class='img-responsive'  src='{{src}}'><figcaption></figcaption></figure></a></li>"
+                         data-cycle-prev=".slide-prev" data-cycle-next=".slide-next">
+                        {
+                            photos.map((photo) => {
+                                return (
+                                        <img src={`${import.meta.env.SITE}/assets/img/${photo.photo}`}
+                                             alt={getTranslate('photo_gallery')}>
+                                )
+                            })
+                        }
+
+                    </div>
+                    <div id="gallery-carousel" class=" grid gallery">
+                        <ul class="slide-pager gallerylinks">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </section>
+    <style is:inline media="screen">
+        .cycle-slideshow {
+            display: none;
+        }
+    </style>
+</MainLayout>

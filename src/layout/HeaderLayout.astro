@@ -1,0 +1,181 @@
+---
+import {getTable} from "../db/db";
+import {TableName} from "../db/enums/tableName";
+import type {Contact} from "../db/interfaces/contact";
+import type {Translate} from "../db/interfaces/translate";
+
+const menus = [
+    {
+        lang: 'tr', menu: [
+            {url: 'kurumsal', view: 'kurumsal'},
+            {url: 'konsept', view: 'konsept'},
+            {url: 'suitler', view: 'suitler'},
+            {url: 'lokasyon', view: 'Lokasyon'},
+            {url: 'bolgemiz', view: 'Bölgemiz'},
+            {url: 'galeri', view: 'Galeri'},
+            {url: 'iletisim', view: 'İletişim'},
+
+        ]
+    },
+    {
+        lang: 'en', menu: [
+            {url: 'corporate', view: 'corporate'},
+            {url: 'concept', view: 'concept'},
+            {url: 'suites', view: 'suites'},
+            {url: 'location', view: 'location'},
+            {url: 'our-region', view: 'Our Region'},
+            {url: 'gallery', view: 'gallery'},
+            {url: 'contact', view: 'contact'},
+
+        ]
+    },
+    {
+        lang: 'ru', menu: [
+            {url: 'корпоративный', view: 'корпоративный'},
+            {url: 'концепция', view: 'концепция'},
+            {url: 'апартаменты', view: 'апартаменты'},
+            {url: 'место-расположения', view: 'место-расположения'},
+            {url: 'наш-регион', view: 'наш-регион'},
+            {url: 'фотогалерея', view: 'фотогалерея'},
+            {url: 'контакт', view: 'контакт'},
+
+        ]
+    },
+    {
+        lang: 'de', menu: [
+            {url: 'unternehmen', view: 'unternehmen'},
+            {url: 'konzept', view: 'konzept'},
+            {url: 'suiten', view: 'suiten'},
+            {url: 'lage', view: 'lage'},
+            {url: 'unsere-region', view: 'Unsere Region'},
+            {url: 'fotogallerie', view: 'fotogallerie'},
+            {url: 'kontakt', view: 'kontakt'},
+
+        ]
+    },
+]
+const langs = ["tr", "de", "ru", "en"];
+const {lang, hotel} = Astro.props;
+const currentPath = Astro.url.pathname;
+const contact = await getTable<Contact>(hotel, TableName.contact);
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate;
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url) return getDaum(url);
+    }
+    return null;
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case "tr":
+            return daum.tr;
+        case "de":
+            return daum.de;
+        case "ru":
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+};
+---
+
+<header>
+    <div class="gmap-wrap" style="display: none">
+        <div id="map">
+            <iframe
+                    src={contact.maps}
+                    width="100%"
+                    height="100%"
+                    style="border:0;"
+                    allowfullscreen=""
+                    loading="lazy"></iframe>
+        </div>
+    </div>
+    <div class="head">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mapMarker">
+                        <a id="openMap" class="mapBtn" href="#">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i
+                                        class="fa fa-map-marker fa-stack-1x fa-inverse"
+                                ></i>
+                            </span>
+                            <span class="maptext hidden-xs"
+                            >{getTranslate("loc_on_map")}</span
+                            >
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="language text-right">
+                        <ul class="pull-right">
+
+                            {
+                                langs.map((x, i) => {
+                                    return (
+                                            <li><a href={`${import.meta.env.SITE}/${hotel}/${x}`}>{i == 0 ? '|' : ''}&nbsp;{x.toUpperCase()}&nbsp;{i < langs.length ? "|" : ''}</a>
+                                            </li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav
+            class="navbar navbar-expand-lg navbar-default header-nav"
+            role="navigation"
+    >
+        <div class="container">
+            <div class="navbar-header">
+                <button
+                        type="button"
+                        class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#navbar-collapse-1"
+                >
+                    <span class="sr-only">Navigasyon</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href={`${import.meta.env.SITE}/${hotel}/${lang}`}
+                ><img
+                        src={`${import.meta.env.SITE}/assets/img/${hotel}_logo.png`}
+                        alt="Trend Aparts Antalya"
+                        width="199"
+                /></a
+                >
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {
+                        menus.find((x) => x.lang == lang)?.menu?.map((menu) => (
+                                <li
+                                        class={
+                                            currentPath === `/${menu}` ? "active" : ""
+                                        }
+                                >
+                                    <a
+                                            style="text-transform: capitalize"
+                                            href={`${import.meta.env.SITE}/${hotel}/${lang}/${menu.url}`}
+                                    >
+                                        {menu.view}
+                                    </a>
+                                </li>
+                        ))
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

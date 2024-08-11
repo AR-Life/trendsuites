@@ -1,0 +1,5 @@
+$(function() {
+
+    $('.gallerylinks a').tosrus();
+
+    });

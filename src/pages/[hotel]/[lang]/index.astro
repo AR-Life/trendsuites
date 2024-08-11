@@ -1,0 +1,221 @@
+---
+import MainLayout from '../../../layout/MainLayout.astro';
+import {getTable} from '../../../db/db';
+import type {Translate} from '../../../db/interfaces/translate';
+import {TableName} from '../../../db/enums/tableName';
+import type {Slider} from '../../../db/interfaces/slider';
+import type {Mp_info} from '../../../db/interfaces/mp_info';
+import type {Suites} from '../../../db/interfaces/suites';
+import type {Seo} from '../../../db/interfaces/seo';
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts"}},
+        {params: {lang: 'tr', hotel: "tsc"}},
+        {params: {lang: 'de', hotel: "ts"}},
+        {params: {lang: 'de', hotel: "tsc"}},
+        {params: {lang: 'en', hotel: "tsc"}},
+        {params: {lang: 'en', hotel: "ts"}},
+        {params: {lang: 'ru', hotel: "ts"}},
+        {params: {lang: 'ru', hotel: "tsc"}},
+    ];
+}
+
+const {lang, hotel} = Astro.params;
+const slider = await getTable<Slider[]>(hotel, TableName.slider);
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const mp_info = await getTable<Mp_info[]>(hotel, TableName.mp_info).then((r) => r[0]);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+
+}
+const getTitle = () => {
+    switch (lang) {
+        case 'tr':
+            return mp_info.title_tr
+        case 'ru':
+            return mp_info.title_ru
+        case 'de':
+            return mp_info.title_de
+        default:
+            return mp_info.title_en
+    }
+}
+const getText = () => {
+    switch (lang) {
+        case 'tr':
+            return mp_info?.text_tr
+        case 'ru':
+            return mp_info.text_ru
+        case 'de':
+            return mp_info.text_de
+        default:
+            return mp_info.text_en
+    }
+}
+const getSubtitle = () => {
+    switch (lang) {
+        case 'tr':
+            return mp_info?.sub_title_tr
+        case 'ru':
+            return mp_info.sub_title_ru
+        case 'de':
+            return mp_info.sub_title_de
+        default:
+            return mp_info.sub_title_en
+    }
+}
+const mp_suites = await getTable<Suites[]>(hotel, TableName.suites);
+interface ImgButton {
+    img: string;
+    url_translate: string;
+    translate: string;
+}
+const imgButtons: ImgButton[] = [
+    {img: "3_1.jpg", url_translate: "url_suites", translate: "suites"},
+    {img: "3_2.jpg", url_translate: "url_concept", translate: "concept"},
+    {img: "3_3.jpg", url_translate: "url_photo_gallery", translate: "photo_gallery"}
+];
+function getSuitName(suit: Suites) {
+    switch (lang) {
+        case 'tr':
+            return suit.name_tr
+        case 'de':
+            return suit.name_de;
+        case 'ru':
+            return suit.name_ru;
+        default:
+            return suit.name_en
+    }
+}
+function getSuitText(suit: Suites) {
+    switch (lang) {
+        case 'tr':
+            return suit.text_tr
+        case 'de':
+            return suit.text_de;
+        case 'ru':
+            return suit.text_ru;
+        default:
+            return suit.text_en
+    }
+}
+const seo = await getTable<Seo>(hotel, TableName.seo)
+function getSeoTitle(seo: Seo) {
+    switch (lang) {
+        case 'tr':
+            return seo.title_tr
+        case 'de':
+            return seo.title_de;
+        case 'ru':
+            return seo.title_ru;
+        default:
+            return seo.title_en
+    }
+}
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <section id="slider2">
+                    <div class="cycle-slideshow" data-cycle-fx="scrollHorz" data-cycle-timeout="5000"
+                         data-cycle-swipe=true
+                         data-cycle-swipe-fx=scrollHorz data-cycle-slides="> div.slide2"
+                         data-cycle-pager=".slide-pager2"
+                         data-cycle-prev=".slide-prev" data-cycle-next=".slide-next"
+                         data-cycle-pager-template="<a href='#'>&nbsp;</a>">
+                        {
+                            slider.map((slide) => {
+                                return (
+                                        <div class="slide2"
+                                             style={`background-image: url('${import.meta.env.SITE}/assets/images/${slide.photo}')`}>
+                                        </div>
+                                )
+                            })
+                        }
+                    </div>
+                    <div class="slide-pager2"></div>
+                    <div class="slide-prev hidden-sm hidden-xs"><i class="fa fa-angle-left"></i></div>
+                    <div class="slide-next hidden-sm hidden-xs"><i class="fa fa-angle-right"></i></div>
+                </section>
+            </div>
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                {
+                    imgButtons.map((x) => (
+                            <div class="imgButtons">
+                                <a href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate(x.url_translate)}`}>
+                                    <img src={`${import.meta.env.SITE}/assets/images/${x.img}`}
+                                         alt={getTranslate(x.translate)}
+                                         class="img-responsive hidden-xs"/>
+                                    <div class="triangle green visible-lg visible-md"></div>
+                                    <span>{getTranslate(x.translate)}<br class="visible-lg visible-md"/> <i
+                                            class="fa fa-chevron-circle-right"></i></span>
+                                </a>
+                            </div>
+                    ))
+                }
+            </div>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container">
+            <div class="row" style="margin-top: 20px">
+                <div class="col-md-12">
+                    <h1 class="text-center" set:html={getTitle()}></h1>
+                    <p class="intro" set:html={getText()}></p>
+                </div>
+            </div>
+            <div class="duyuru">
+                <h5 set:html={getSubtitle()}></h5>
+            </div>
+        </div>
+    </section>
+    <section id="shortcuts">
+        <div class="container">
+            <div class="row">
+                {
+                    mp_suites.map((suit) => {
+                        return (
+                                <div class="col-md-4 col-sm-4">
+                                    <div class="item text-center">
+                                        <div class="box">
+                                            <a
+                                                    href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate('url_suites')}#suitler-gelecek-sanırım`}>
+                                                <img src={`${import.meta.env.SITE}/assets/images/suites/${suit.cover_photo}`}
+                                                     alt={`${getSuitName(suit)} ${getSeoTitle(seo)}`}
+                                                     class="img-responsive"/>
+                                            </a>
+                                            <a href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate('url_suites')}#suitler-gelecek-sanırım`}
+                                               class="readmore">{getTranslate('detail_info')}</a>
+                                        </div>
+                                        <h4>{getSuitName(suit)}</h4>
+                                        <span set:html={getSuitText(suit)}></span>
+                                    </div>
+                                </div>
+                        );
+                    })
+                }
+            </div>
+        </div>
+    </section>
+</MainLayout>

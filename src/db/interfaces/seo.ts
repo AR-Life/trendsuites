@@ -1,0 +1,1 @@
+export interface Seo{id:string;title_tr:string;title_en:string;title_de:string;title_ru:string;desc_tr:string;desc_en:string;desc_de:string;desc_ru:string;keys_tr:string;keys_en:string;keys_de:string;keys_ru:string;islem_zamani:string}

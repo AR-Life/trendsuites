@@ -1,0 +1,133 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+import  type{Contact} from "../../../db/interfaces/contact";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", contact: 'iletisim'}},
+        {params: {lang: 'tr', hotel: "tsc", contact: 'iletisim'}},
+        {params: {lang: 'de', hotel: "ts", contact: 'kontakt'}},
+        {params: {lang: 'de', hotel: "tsc", contact: 'kontakt'}},
+        {params: {lang: 'en', hotel: "tsc", contact: 'contact'}},
+        {params: {lang: 'en', hotel: "ts", contact: 'contact'}},
+        {params: {lang: 'ru', hotel: "ts", contact: 'контакт'}},
+        {params: {lang: 'ru', hotel: "tsc", contact: 'контакт'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+}
+const cont = await getTable<Contact[]>(hotel, TableName.contact).then((r) => r[0]);
+function getContactAddres() {
+    switch (lang) {
+        case 'tr':
+            return cont.address_tr;
+        case 'ru':
+            return cont.address_ru;
+        case 'de':
+            return cont.address_de;
+        default:
+            return cont.address_en;
+    }
+}
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('contact')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li><a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>{getTranslate('home')}</a></li>
+                            <li class="active">{getTranslate('contact')}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div>
+                <div class="content">
+                    <div class="content-inner ">
+                        <div class="white-bg clearfix">
+                            <div class="col-12">
+                                <ul class="contact-info">
+                                    <li>
+                                        <a href={`https://maps.google.com/?q=${getContactAddres()}`}
+                                           target="_blank">
+                                        <span class="icon">
+                                            <i class="fa fa-map-marker"></i>
+                                        </span>
+                                        <span class="text">
+
+                                                {getContactAddres()}
+                                        </span>
+                                        </a>
+
+                                    </li>
+                                    <li>
+                                        <a href={`tel:${cont.tel}`}>
+                                        <span class="icon">
+                                            <i class="fa fa-phone"></i>
+                                        </span>
+                                            <span class="text">
+                                                    {cont.tel}
+                                        </span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="email" href={`mailto:${cont.email}`}>
+
+                                        <span class="icon">
+                                            <i class="fa fa-envelope"></i>
+                                        </span>
+                                        <span class="text">
+                                                {cont.email}
+                                        </span>
+                                        </a>
+
+                                    </li>
+                                </ul>
+                                <a data-target="#branches" class="btn btn-brown btn-block mapBtn" id="openMap2"
+                                   style="font-size: 1.3em" href="#">{getTranslate('loc_on_map')}</a>
+                                <button class="btn btn-default btn-block" style="margin-top: 20px"
+                                        onclick="window.open('https://goo.gl/maps/Wm527csCKvu1FXDY6', '_blank');">
+                                    {getTranslate('directions')}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</MainLayout>

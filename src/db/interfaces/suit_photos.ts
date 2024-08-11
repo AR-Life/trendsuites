@@ -1,0 +1,1 @@
+export interface Suit_photos{id:string;suit_id:string;photo:string;row_no:string;active:string;islem_zamani:string}

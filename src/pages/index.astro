@@ -1,0 +1,259 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Trend Suites | Konyaaltı / Antalya</title>
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            body {
+                margin: 0;
+                font-family: "Kalam", cursive;
+            }
+
+            .column {
+                text-align: center;
+            }
+
+            a p {
+                font-size: 1.5rem;
+            }
+
+            /* codepen */
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .container {
+                align-items: center;
+                background: #fff;
+                display: flex;
+                justify-content: center;
+                height: 100vh;
+                width: 100vw;
+                background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABZJREFUeNpi2r9//38gYGAEESAAEGAAasgJOgzOKCoAAAAASUVORK5CYII=);
+            }
+
+            /* codepen */
+
+            @media (max-width: 991px) {
+                .row {
+                    position: fixed;
+                    width: 100%;
+                    height: 100%;
+                    top: 25px;
+                    margin: auto;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                }
+
+                img {
+                    width: 70%;
+                    padding: 2%;
+                }
+
+                .item {
+                    align-items: center;
+                    display: flex;
+                    justify-content: center;
+                    position: relative;
+                    z-index: 1000;
+                }
+
+                .item img {
+                    object-fit: contain;
+                }
+
+                a {
+                    transition: all 0.5s;
+                    text-decoration: none;
+                    color: black;
+                }
+            }
+
+            @media (min-width: 992px) {
+                .row {
+                    position: fixed;
+                    width: 100%;
+                    margin: auto;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                }
+
+                img {
+                    width: 80%;
+                    padding: 2%;
+                }
+
+                .item {
+                    align-items: center;
+                    display: flex;
+                    height: 400px;
+                    justify-content: center;
+                    position: relative;
+                    width: 400px;
+                    z-index: 1000;
+                }
+
+                .item img {
+                    object-fit: contain;
+                    height: 400px;
+                    width: 400px;
+                }
+
+                a {
+                    transition: all 0.5s;
+                    text-decoration: none;
+                    color: black;
+                    height: 400px;
+                }
+
+                .item:hover {
+                    animation-name: hoverPop;
+                    animation-duration: 0.4s;
+                    animation-fill-direction: forward;
+                }
+                .item:hover img {
+                    box-shadow: 2px 2px 4px 0px rgba(10, 12, 15, 0.27);
+                    box-shadow: 0px 0px 30px 0px rgba(10, 12, 15, 0.27);
+                    background-color: #f2f2f2;
+                    border: 1px solid #eee;
+                }
+                .item:hover::before {
+                    animation: slick-hover-2 3s 0.4s linear infinite;
+                    transform: translateY(-20px) translateX(-20px);
+                    background-image: linear-gradient(
+                        -180deg,
+                        #a1deff 0%,
+                        #5ea3db 97%
+                    );
+                    content: "";
+                    height: 100%;
+                    position: absolute;
+                    transition: all 0.2s;
+                    transition-delay: 0.2s;
+                    width: 100%;
+                    z-index: -1;
+                }
+                .item:hover::after {
+                    animation: slick-hover 3s 0.4s linear infinite reverse;
+                    transform: translateY(20px) translateX(20px);
+                    content: "";
+                    height: 100%;
+                    position: absolute;
+                    transition: all 0.2s;
+                    transition-delay: 0.2s;
+                    width: 100%;
+                    z-index: -1;
+                    background-image: linear-gradient(
+                        0deg,
+                        #ffcf70 0%,
+                        #ffae3d 97%
+                    );
+                }
+
+                @keyframes hoverPop {
+                    0%,
+                    100% {
+                        transform: scale(1);
+                    }
+                    33% {
+                        transform: scale(1.05);
+                    }
+                    66% {
+                        transform: scale(0.9);
+                    }
+                }
+                @keyframes slick-hover {
+                    0.00% {
+                        transform: translateY(20px) translateX(20px);
+                    }
+                    16.67% {
+                        transform: translateY(-13px) translateX(-9px);
+                    }
+                    33.33% {
+                        transform: translateY(4px) translateX(12px);
+                    }
+                    50.00% {
+                        transform: translateY(20px) translateX(-20px);
+                    }
+                    66.67% {
+                        transform: translateY(-3px) translateX(8px);
+                    }
+                    83.33% {
+                        transform: translateY(-15px) translateX(-11px);
+                    }
+                    100.00% {
+                        transform: translateY(20px) translateX(20px);
+                    }
+                }
+                @keyframes slick-hover-2 {
+                    0.00% {
+                        transform: translateY(-20px) translateX(-20px);
+                    }
+                    16.67% {
+                        transform: translateY(3px) translateX(-5px);
+                    }
+                    33.33% {
+                        transform: translateY(18px) translateX(-10px);
+                    }
+                    50.00% {
+                        transform: translateY(-20px) translateX(20px);
+                    }
+                    66.67% {
+                        transform: translateY(15px) translateX(-4px);
+                    }
+                    83.33% {
+                        transform: translateY(-1px) translateX(15px);
+                    }
+                    100.00% {
+                        transform: translateY(-20px) translateX(-20px);
+                    }
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        
+        <div class="container">
+            <div class="row">
+                <div class="column item">
+                    <a href={`en/ts`} id="ts">
+                        <img
+                            src="assets/images/ts-logo.png"
+                            alt="Trend Suites"
+                        />
+                        <p>Est. 2015</p>
+                    </a>
+                </div>
+                <div class="column item">
+                    <a href={`en/tsc`} id="tsc">
+                        <img
+                            src="assets/images/tsc-logo.png"
+                            alt="Trend Suites Cycle"
+                        />
+                        <p>Est. 2021</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script is:inline>
+            const langues = ['tr','en','ru','de'];
+            const langue = langues.find((x) => x == window.navigator.language) || 'en';
+            const ts = document.getElementById("ts");
+            const tsc = document.getElementById("tsc");
+            ts.setAttribute("href",`ts/${langue}`)
+            tsc.setAttribute("href",`tsc/${langue}`)
+        </script>
+    </body>
+</html>

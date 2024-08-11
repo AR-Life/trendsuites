@@ -1,0 +1,148 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import type {Location} from "../../../db/interfaces/location";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", location: 'lokasyon'}},
+        {params: {lang: 'tr', hotel: "tsc", location: 'lokasyon'}},
+        {params: {lang: 'de', hotel: "ts", location: 'lage'}},
+        {params: {lang: 'de', hotel: "tsc", location: 'lage'}},
+        {params: {lang: 'en', hotel: "tsc", location: 'location'}},
+        {params: {lang: 'en', hotel: "ts", location: 'location'}},
+        {params: {lang: 'ru', hotel: "ts", location: 'место-расположения'}},
+        {params: {lang: 'ru', hotel: "tsc", location: 'место-расположения'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+
+}
+const locali = await getTable<Location[]>(hotel, TableName.location).then(r => r[0]);
+const getLocalationTitle = () => {
+    switch (lang) {
+        case 'tr':
+            return locali.title_tr;
+        case 'ru':
+            return locali.title_ru;
+        case 'de':
+            return locali.title_de;
+        default:
+            return locali.title_en;
+    }
+}
+const getLocalationText = () => {
+    switch (lang) {
+        case 'tr':
+            return locali.text_tr;
+        case 'ru':
+            return locali.text_ru;
+        case 'de':
+            return locali.text_de;
+        default:
+            return locali.text_en;
+    }
+}
+const getLocalationSubTitle = () => {
+    switch (lang) {
+        case 'tr':
+            return locali.sub_title_tr;
+        case 'ru':
+            return locali.sub_title_ru;
+        case 'de':
+            return locali.sub_title_de;
+        default:
+            return locali.sub_title_en;
+    }
+}
+const getLocalationSubText = () => {
+    switch (lang) {
+        case 'tr':
+            return locali.sub_text_tr;
+        case 'ru':
+            return locali.sub_text_ru;
+        case 'de':
+            return locali.sub_text_de;
+        default:
+            return locali.sub_text_en;
+    }
+}
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2 set:html={getTranslate('corporate')}></h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li>
+                                <a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>
+                                    {getTranslate('home')}
+                                </a>
+                            </li>
+                            <li class="active" set:html={getLocalationTitle()}>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li>
+                            <a href="#">{getTranslate('trend_suites')}</a>
+                        </li>
+                        <li>
+                            <a href={`${import.meta.env.SITE}/${hotel}/${lang}/${getTranslate('url_corporate')}`}>
+                                {getTranslate('general_info')}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="active2">
+                                {getTranslate('location')}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-9">
+                    <h1 class="text-center">{getTranslate('trend_suites')}</h1>
+                    <p set:html={getLocalationText()}></p>
+                    <h3 style="text-align: center; margin-top: 30px">
+                        <strong set:html={getLocalationSubTitle()}></strong>
+                    </h3>
+                    <p set:html={getLocalationSubText()}></p>
+                </div>
+            </div>
+        </div>
+    </section>
+</MainLayout>

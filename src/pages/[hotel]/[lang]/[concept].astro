@@ -1,0 +1,97 @@
+---
+import {getTable} from "../../../db/db";
+import type {Translate} from "../../../db/interfaces/translate";
+import {TableName} from "../../../db/enums/tableName";
+import MainLayout from "../../../layout/MainLayout.astro";
+export function getStaticPaths() {
+    return [
+        {params: {lang: 'tr', hotel: "ts", concept: 'konsept'}},
+        {params: {lang: 'tr', hotel: "tsc", concept: 'konsept'}},
+        {params: {lang: 'de', hotel: "ts", concept: 'konzept'}},
+        {params: {lang: 'de', hotel: "tsc", concept: 'konzept'}},
+        {params: {lang: 'en', hotel: "tsc", concept: 'concept'}},
+        {params: {lang: 'en', hotel: "ts", concept: 'concept'}},
+        {params: {lang: 'ru', hotel: "ts", concept: 'концепция'}},
+        {params: {lang: 'ru', hotel: "tsc", concept: 'концепция'}},
+
+    ];
+}
+const {lang, hotel} = Astro.params;
+const translate = await getTable<Translate[]>(hotel, TableName.translate);
+const getTranslate = (value: string) => {
+    const data = translate
+    if (data) {
+        const url = data.find((x) => x.tag == value);
+        if (url)
+            return getDaum(url)
+
+    }
+    return null;
+
+};
+const getDaum = (daum: Translate): string => {
+    switch (lang) {
+        case 'tr':
+            return daum.tr;
+        case 'de':
+            return daum.de;
+        case 'ru':
+            return daum.ru;
+        default:
+            return daum.en;
+    }
+
+}
+---
+<MainLayout lang={lang} hotel={hotel}>
+    <section class="content">
+        <div class="title">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-6">
+                        <h2>{getTranslate('concept')}</h2>
+                    </div>
+                    <div class="col-md-6 col-sm-6 hidden-xs">
+                        <ol class="breadcrumb text-right">
+                            <li><a href={`${import.meta.env.SITE}/${hotel}/${lang}`}>{getTranslate('home')}</a></li>
+                            <li class="active">{getTranslate('concept')}</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fullImg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="transparent">
+                            <?= $data['concept']['text'] ?>
+                            <ul id="kons_icerik">
+                                <li>
+                                    <i class="faicon"><img src="/assets/img/home.png"/></i>
+                                    <span set:html={getTranslate('large_apartment')}></span>
+                                </li>
+                                <li>
+                                    <i class="faicon"><img src="/assets/img/pool.png"/></i>
+                                    <span set:html={getTranslate('pool')}></span>
+                                </li>
+                                <li>
+                                    <i class="faicon"><img src="/assets/img/car.png"/></i>
+                                    <span set:html={getTranslate('free_car_park')}></span>
+                                </li>
+                                <li>
+                                    <i class="faicon"><img src="/assets/img/wifi2.png"/></i>
+                                    <span>{getTranslate('wifi')}</span>
+                                </li>
+                                <li>
+                                    <i class="faicon"><img src="/assets/img/plane.png"/></i>
+                                    <span set:html={getTranslate('airport')}></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</MainLayout>

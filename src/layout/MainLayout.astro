@@ -1,0 +1,41 @@
+---
+import HeadLayout from "./HeadLayout.astro";
+import HeaderLayout from "./HeaderLayout.astro";
+import FooterLayout from "./FooterLayout.astro";
+const {lang, title, hotel} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+<HeadLayout title={title}/>
+<body data-firma="Trend Suites">
+<div id="wrapper">
+    <HeaderLayout hotel={hotel} lang={lang}></HeaderLayout>
+    <div id="content">
+        <slot/>
+    </div>
+    <FooterLayout/>
+</div>
+<script is:inline src="/assets/js/jquery-2.1.3.min.js"></script>
+<script is:inline src="/assets/js/jquery.bootstrap.newsbox.min.js"></script>
+<script is:inline src="/assets/js/jquery.cycle2.min.js"></script>
+<script is:inline src="/assets/js/jquery.flexslider-min.js"></script>
+<script is:inline src="/assets/js/jquery.magnific-popup.min.js"></script>
+<script is:inline src="/assets/js/jquery.tosrus.min.all.js"></script>
+<script is:inline src="/assets/js/bootstrap.min.js"></script>
+<script is:inline src="/assets/js/daterangepicker.js"></script>
+<script is:inline src="/assets/js/downloadxml.js"></script>
+<script is:inline src="/assets/js/gmaps.js"></script>
+<script is:inline src="/assets/js/googleanalytic.js"></script>
+<script is:inline src="/assets/js/hammer.min.js"></script>
+<script is:inline src="/assets/js/lc_lightbox.lite.js"></script>
+<script is:inline src="/assets/js/map.setup.js"></script>
+<script is:inline src="/assets/js/moment.js"></script>
+<script is:inline src="/assets/js/owl.carousel.min.js"></script>
+<script is:inline src="/assets/js/royal_preloader.min.js"></script>
+<script is:inline src="/assets/js/runtosrus.js"></script>
+<script is:inline src="/assets/js/bolgemizjs.js"></script>
+<script is:inline src="/assets/js/custom.js"></script>
+
+</body>
+</html>

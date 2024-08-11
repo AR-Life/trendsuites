@@ -1,0 +1,310 @@
+/******************************************************************************
+  Max Width "1300x"
+*******************************************************************************/
+@media (max-width: 1300px) {
+
+    .grid figure img{
+        height: 215px;
+    }
+    .grid figure{
+        height: 215px;
+    }
+
+}
+
+/******************************************************************************
+  Min Width "1200x"
+*******************************************************************************/
+@media (min-width: 1200px) {
+
+}
+
+/******************************************************************************
+  Min Width "992px"
+*******************************************************************************/
+@media (min-width: 992px) {
+
+}
+
+/******************************************************************************
+  Max Width "1270px" - Min Width "1200px"
+*******************************************************************************/
+@media (min-width: 1200px) and (max-width: 1270px) {
+
+}
+
+/******************************************************************************
+  Max Width "1199px"
+*******************************************************************************/
+@media (max-width: 1199px) {
+
+}
+
+/******************************************************************************
+  Max Width "1199px" - Min Width "992px" IPAD YATAY
+*******************************************************************************/
+@media (min-width: 992px) and (max-width: 1199px) {
+   #slider{
+        height: 410px;
+        margin-bottom: 10px;
+    }
+    .imgButtons a{
+        font-size: 20px;
+    }
+    .triangle{
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+    left: 0px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 120px 213px 0 0;
+    }
+    .nav > li > a{
+        padding: 10px 15px;
+    }
+    .navbar-nav > li > a{
+        font-size: 16px;
+    }
+}
+
+/******************************************************************************
+  Max Width "991px"
+*******************************************************************************/
+@media (max-width: 991px) {
+
+}
+
+/******************************************************************************
+  Max Width "800px"
+*******************************************************************************/
+@media (max-width: 800px) {
+
+}
+
+/******************************************************************************
+  Max Width "991px" - Min Width "768px" IPAD DIKEY
+*******************************************************************************/
+@media (min-width: 768px) and (max-width: 991px) {
+     
+    .navbar-nav > li > a{
+        font-size: 15px;
+    }
+   .imgButtons {
+        float: left;
+        width: 32%;
+        margin-right: 8px;
+        margin-top: 10px;
+    }
+    .imgButtons a span{
+        display: block;
+        position: absolute;
+        background-color: #31CEC3;
+        padding: 10px;
+        left: auto;
+        transition: none;
+        top: auto;
+        width: 100%;
+        bottom: 0;
+        font-size: 16px;
+    }
+    .imgButtons a:hover span{
+        left: auto;
+    }
+}
+
+/******************************************************************************
+  Min Width "768px" 
+*******************************************************************************/
+@media (min-width: 768px) {
+   
+}
+
+/******************************************************************************
+  Max Width "767px"
+*******************************************************************************/
+@media (max-width: 767px) {
+    
+}
+
+
+
+
+
+/******************************************************************************
+  Max Width "600px" TELEFON YATAY
+*******************************************************************************/
+@media (max-width: 680px) {
+    .navbar-brand > img{
+        margin-left: 15px;
+    }
+    .navbar-toggle{
+        margin-top: 15px;
+    }
+    #slider{
+        height: 300px;
+        margin-bottom: 10px;
+    }
+    .imgButtons {
+        float: none;
+        width: 100%;
+        margin-right: 8px;
+    }
+     .imgButtons img{
+        width: 100%;
+    }
+    .imgButtons a span{
+        display: block;
+        position: absolute;
+        background-color: #31CEC3;
+        padding: 10px;
+        left: auto;
+        transition: none;
+        top: auto;
+        width: 100%;
+        bottom: 0;
+        font-size: 16px;
+    }
+    .imgButtons a:hover span{
+        left: auto;
+    }
+    #map {
+        height: 180px;
+    }
+    .gmap-wrap {
+        height: 180px;
+    }
+    #map2{
+        height: 360px;
+    }
+    #slider2 {
+        height: 278px;
+        margin-bottom: 20px;
+    }
+    .duyuru h5{
+        font-size: 14px;
+        line-height: 22px;
+    }
+    .grid figure img{
+        height: 155px;
+    }
+    #kons_icerik li {
+        min-height: 96px;
+        width: 112px;
+    }
+    #mapsearch {
+        right: -300px;
+    }
+    .grid figure img{
+        height: 85px;
+    }
+    .grid figure{
+        height: 85px;
+    }
+}
+
+/******************************************************************************
+  Max Width "480px"   TELEFON DIKEY
+*******************************************************************************/
+@media (max-width: 480px) {
+    .navbar-brand > img{
+        margin-left: 15px;
+    }
+    .navbar-toggle{
+        margin-top: 15px;
+    }
+    #slider{
+        height: 250px;
+        margin-bottom: 10px;
+    }
+    .imgButtons{
+        margin-bottom: 10px;
+    }
+    .imgButtons img{
+        width: 100%;
+
+    }
+    .imgButtons a span{
+        display: block;
+        position: absolute;
+        background-color: #31CEC3;
+        padding: 10px;
+        left: auto;
+        transition: none;
+        top: auto;
+        width: 100%;
+        bottom: 0;
+        font-size: 16px;
+    }
+    .imgButtons a:hover span{
+        left: auto;
+    }
+    #map {
+        height: 250px;
+    }
+    #map2{
+        height: 360px;
+    }
+    .gmap-wrap {
+        height: 250px;
+    }
+    #slider2 {
+        height: 293px;
+        margin-bottom: 20px;
+    }
+    .imgButtons a span{
+        position: relative;
+    }
+    .duyuru h5{
+        font-size: 14px;
+        line-height: 22px;
+    }
+    .roomDetails table{
+        font-size: 9px;
+    }
+    .banner {
+        height: 40px;
+    }
+    .banner p {
+        color: #fff;
+        font-size: 14px;
+        line-height: 30px;
+        text-align: center;
+    }
+    .grid figure img{
+        height: 85px;
+    }
+    .grid figure{
+        height: 85px;
+    }
+    #kons_icerik li {
+        min-height: 34px;
+        width: 56px;
+    }
+    .faicon {
+        font-size: 18px;
+        margin-top: 9px;
+    }
+    #kons_icerik li span {
+        font-size: 11px;
+        margin-top: 3px;
+    }
+    #kons_icerik li:nth-child(5) span, #kons_icerik li:nth-child(4) span{
+        margin-top: 3px;
+    }
+
+    #mapsearch {
+        right: -300px;
+    }
+    #slides img, #slides2 img{
+        height: 295px !important;
+    }
+    .nav > li > a{
+        padding: 10px 2px;
+    }
+    .nav-tabs > li{
+        font-size: 12px;
+    }
+}
+

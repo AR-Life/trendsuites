@@ -1,0 +1,1 @@
+export interface About { id: string; title_tr: string; title_en: string; title_de: string; title_ru: string; text_tr: string; text_en: string; text_de: string; text_ru: string; islem_zamani: string }

@@ -1,0 +1,1 @@
+export interface Contact{id:string;address_tr:string;address_en:string;address_de:string;address_ru:string;tel:string;email:string;maps:string;islem_zamani:string;loc_map:string}
